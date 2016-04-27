@@ -17,10 +17,7 @@ import java.util.List; // resolves problem with java.awt.List and java.util.List
 public class Picture extends SimplePicture 
 {
   ///////////////////// constructors //////////////////////////////////
-  
-  /**
-   * Constructor that takes no arguments 
-   */
+
   public Picture ()
   {
     /* not needed but use it to show students the implicit call to super()
@@ -28,43 +25,25 @@ public class Picture extends SimplePicture
      */
     super();  
   }
-  
-  /**
-   * Constructor that takes a file name and creates the picture 
-   * @param fileName the name of the file to create the picture from
-   */
+
   public Picture(String fileName)
   {
     // let the parent class handle this fileName
     super(fileName);
   }
-  
-  /**
-   * Constructor that takes the width and height
-   * @param height the height of the desired picture
-   * @param width the width of the desired picture
-   */
+
   public Picture(int height, int width)
   {
     // let the parent class handle this width and height
     super(width,height);
   }
-  
-  /**
-   * Constructor that takes a picture and creates a 
-   * copy of that picture
-   * @param copyPicture the picture to copy
-   */
+
   public Picture(Picture copyPicture)
   {
     // let the parent class do the copy
     super(copyPicture);
   }
-  
-  /**
-   * Constructor that takes a buffered image
-   * @param image the buffered image to use
-   */
+
   public Picture(BufferedImage image)
   {
     super(image);
@@ -72,11 +51,6 @@ public class Picture extends SimplePicture
   
   ////////////////////// methods ///////////////////////////////////////
   
-  /**
-   * Method to return a string with information about this picture.
-   * @return a string with information about the picture such as fileName,
-   * height and width.
-   */
   public String toString()
   {
     String output = "Picture, filename " + getFileName() + 
@@ -86,22 +60,42 @@ public class Picture extends SimplePicture
     
   }
   
-  /** Method to set the blue to 0 */
   public void zeroBlue()
   {
-    Pixel[][] pixels = this.getPixels2D();
-    for (Pixel[] rowArray : pixels)
-    {
-      for (Pixel pixelObj : rowArray)
-      {
-        pixelObj.setBlue(0);
-      }
-    }
+	  Pixel[][] pixels = this.getPixels2D();
+	  for (Pixel[] rowArray : pixels)
+	  {
+		for (Pixel pixelObj : rowArray)
+    		{
+    			pixelObj.setBlue(0);
+    		}
+	  }
   }
   
-  /** Method that mirrors the picture around a 
-    * vertical mirror in the center of the picture
-    * from left to right */
+  public void zeroRed()
+  {
+	  Pixel[][] pixels = this.getPixels2D();
+	  for (Pixel[] rowArray : pixels)
+	  {
+		  for (Pixel pixelObj : rowArray)
+		  {
+			  pixelObj.setRed(0);
+		  }
+	  }
+  }
+
+  public void zeroGreen()
+  {
+	  Pixel[][] pixels = this.getPixels2D();
+	  for (Pixel[] rowArray : pixels)
+	  {
+		  for (Pixel pixelObj : rowArray)
+		  {
+			  pixelObj.setGreen(0);
+		  }
+	  }
+  }
+
   public void mirrorVertical()
   {
     Pixel[][] pixels = this.getPixels2D();
@@ -119,7 +113,44 @@ public class Picture extends SimplePicture
     } 
   }
   
-  /** Mirror just part of a picture of a temple */
+  public void RandomColor()
+  {
+	  Pixel[][] pixels = this.getPixels2D();
+	  for(Pixel[] row : pixels)
+	  {
+		  for(Pixel currentPixel : row)
+		  {
+			  int randomRed, randomBlue, randomGreen;
+			  
+			  randomRed = (int)(Math.random() * 256);
+			  randomGreen = (int)(Math.random() * 256);
+			  randomBlue = (int)(Math.random() * 256);
+			  
+			  currentPixel.setBlue(randomBlue);
+			  currentPixel.setGreen(randomGreen);
+			  currentPixel.setRed(randomRed);
+		  }
+	  }
+  }
+  
+  public void mirrorVerticalRightToLeft()
+  {
+	  Pixel[][] pixels = this.getPixels2D();
+	  Pixel leftPixel = null;
+	  Pixel rightPixel = null;
+	  int pictureWidth = pixels[0].length;
+	  for(int row = 0; row < pixels.length; row++)
+	  {
+		  for(int col = pixels[0].length - 1; col > pictureWidth / 2;col --)
+		  {
+			  rightPixel = pixels[row][col];
+			  leftPixel = pixels[row][(pictureWidth/2) - (col-pictureWidth/2)];
+			  leftPixel.setColor(rightPixel.getColor());
+		  }
+	  }
+			  
+  }
+  
   public void mirrorTemple()
   {
     int mirrorPoint = 276;
@@ -143,13 +174,6 @@ public class Picture extends SimplePicture
     }
   }
   
-  /** copy from the passed fromPic to the
-    * specified startRow and startCol in the
-    * current picture
-    * @param fromPic the picture to copy from
-    * @param startRow the start row to copy to
-    * @param startCol the start col to copy to
-    */
   public void copy(Picture fromPic, 
                  int startRow, int startCol)
   {
@@ -174,7 +198,6 @@ public class Picture extends SimplePicture
     }   
   }
 
-  /** Method to create a collage of several pictures */
   public void createCollage()
   {
     Picture flower1 = new Picture("flower1.jpg");
@@ -191,10 +214,6 @@ public class Picture extends SimplePicture
     this.write("collage.jpg");
   }
   
-  
-  /** Method to show large changes in color 
-    * @param edgeDist the distance for finding edges
-    */
   public void edgeDetection(int edgeDist)
   {
     Pixel leftPixel = null;
@@ -218,16 +237,12 @@ public class Picture extends SimplePicture
     }
   }
   
-  
-  /* Main method for testing - each class in Java can have a main 
-   * method 
-   */
   public static void main(String[] args) 
   {
     Picture CumberlandIsland = new Picture("CumberlandIsland.jpg");
     CumberlandIsland.explore();
-    CumberlandIsland.zeroBlue();
+    CumberlandIsland.mirrorVertical();
     CumberlandIsland.explore();
   }
   
-} // this } is the end of class Picture, put all new methods before this
+}
